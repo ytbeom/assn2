@@ -74,6 +74,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="fireloop.cpp" />
+    <ClCompile Include="firepot.cpp" />
+    <ClCompile Include="lion.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="fireloop.h" />
+    <ClInclude Include="firepot.h" />
+    <ClInclude Include="lion.h" />
+    <ClInclude Include="main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
