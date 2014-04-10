@@ -83,6 +83,10 @@ int collision(){
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	//ÇÏ´Ã ¹ÙÅÁ?
+	glColor3f(0.529,0.807,0.980);
+	glRectf(-mapsize,10,mapsize+200,100);
 	
 	// °ÔÀÓ È­¸é ¹Ù´ÚÀ» ºÐÈ«»öÀ¸·Î »öÄ¥
 	glColor3f(1.0,0.5,0.5);
@@ -154,9 +158,11 @@ void display(void)
 		display_fireloop_front(LoopList);
 		my_lion.drawLeg();
 		my_lion.drawLion();
+
 		display_fireloop_back(LoopList);
+
 		glScalef(0.5f,0.5f,1.0f);
-		display_firepot(PotList);
+		display_firepot(PotList, BackgroundChange);
 		glLoadIdentity();
 		glFlush();
 		glutSwapBuffers();
@@ -319,15 +325,71 @@ void reshape(int w, int h)
 	glLoadIdentity();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void moveObjects(int) {
 	for (int i = 0; i < NumofLoop; i++) {
-		LoopList[i]-=1;
+		//LoopList[i]-=1;
 	}
+
 	glutPostRedisplay();
+	
 	glutSpecialFunc(specialkeyboard);
 	glutTimerFunc(2000/60,moveObjects,1);
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 int main(int argc, char** argv)
