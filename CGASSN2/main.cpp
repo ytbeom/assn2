@@ -155,11 +155,11 @@ void display(void)
 	}
 
 	else if(!collision()) {
-		display_fireloop_front(LoopList);
+		display_fireloop_front(LoopList, BackgroundChange);
 		my_lion.drawLeg();
 		my_lion.drawLion();
 
-		display_fireloop_back(LoopList);
+		display_fireloop_back(LoopList, BackgroundChange);
 
 		glScalef(0.5f,0.5f,1.0f);
 		display_firepot(PotList, BackgroundChange);

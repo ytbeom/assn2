@@ -9,8 +9,8 @@
 
 using namespace std;
 
-void display_fireloop_front(vector<int> LoopList);
-void display_fireloop_back(vector<int> LoopList);
+void display_fireloop_front(vector<int> LoopList, int toggle);
+void display_fireloop_back(vector<int> LoopList, int toggle);
 void update_fireloop(vector<int> LoopList);
 
 #endif FIRELOOP_H

@@ -29,9 +29,9 @@ void display_firepot(vector<int> PotList, int toggle) {
 
 		glPushMatrix();
 		if(toggle<5)
-			glTranslatef(0.7,0,0);
+			glTranslatef(0.3,0,0);
 		else
-			glTranslatef(-0.7,0,0);
+			glTranslatef(-0.3,0,0);
 
 		
 		glColor3f(1.0, 0.0, 0.0);
@@ -61,7 +61,12 @@ void display_firepot(vector<int> PotList, int toggle) {
 		glShadeModel(GL_FLAT);
 		glEnd();
 		
-
+		glPopMatrix();
+		glPushMatrix();
+		if(toggle<5)
+			glTranslatef(0.7,0,0);
+		else
+			glTranslatef(-0.7,0,0);
 		
 		glColor3f(1.0, 0.0, 0.0);
 		glBegin(GL_POLYGON);
