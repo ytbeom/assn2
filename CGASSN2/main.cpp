@@ -19,6 +19,7 @@ extern float RadiusofFire;
 extern float BottomofPot;
 extern float TopofFire;
 int BackgroundChange = 0;
+int translateLoop = 0;
 vector<int> BackgroundX;
 vector<int> BackgroundY;
 
@@ -73,7 +74,7 @@ int collision(){
 	}
 	
 	for(int i = 0; i < NumofLoop; i++){
-		if(my_lion.IsCollisionLoop(LoopList[i], top - RadiusofLoop, RadiusofLoop))
+		if(my_lion.IsCollisionLoop(LoopList[i]+translateLoop, top - RadiusofLoop, RadiusofLoop))
 			return true;
 	}
 
@@ -155,15 +156,30 @@ void display(void)
 	}
 
 	else if(!collision()) {
+
+		//translate Loop
+		glPushMatrix();
+		glTranslatef(translateLoop,0,0);
 		display_fireloop_front(LoopList, BackgroundChange);
+		glPopMatrix();
+
+		//draw lion
 		my_lion.drawLeg();
 		my_lion.drawLion();
 
+		//translate Loop
+		glPushMatrix();
+		glTranslatef(translateLoop,0,0);
 		display_fireloop_back(LoopList, BackgroundChange);
+		glPopMatrix();
 
+		//draw firepot
+		glPushMatrix();
 		glScalef(0.5f,0.5f,1.0f);
 		display_firepot(PotList, BackgroundChange);
-		glLoadIdentity();
+		glPopMatrix();
+
+
 		glFlush();
 		glutSwapBuffers();
 	}
@@ -325,72 +341,14 @@ void reshape(int w, int h)
 	glLoadIdentity();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void moveObjects(int) {
-	for (int i = 0; i < NumofLoop; i++) {
-		//LoopList[i]-=1;
-	}
-
+	translateLoop-=1;
 	glutPostRedisplay();
 	
 	glutSpecialFunc(specialkeyboard);
 	glutTimerFunc(2000/60,moveObjects,1);
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int main(int argc, char** argv)
 {

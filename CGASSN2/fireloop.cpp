@@ -10,11 +10,11 @@ extern Lion my_lion;
 
 void display_fireloop_front(vector<int> LoopList, int toggle) {
 	// 고리의 앞부분을 그리는 부분, 사자보다 먼저 그려져야 함
-	glColor3f(1.0, 0.0, 0.0);
-	glLineWidth(25);
+	
 	for (int i = 0; i < NumofLoop; i++) {
 		if (LoopList[i] < mapsize+200) {
-			
+			glColor3f(1.0, 0.0, 0.0);
+			glLineWidth(25);
 			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
@@ -53,10 +53,11 @@ void display_fireloop_front(vector<int> LoopList, int toggle) {
 
 void display_fireloop_back(vector<int> LoopList, int toggle) {
 	// 고리의 뒷부분을 그리는 부분, 사자보다 나중에 그려져야 함
-	glColor3f(1.0, 0.0, 0.0);
-	glLineWidth(25);
+	
 	for (int i = 0; i < NumofLoop; i++) {
 		if (LoopList[i] < mapsize+200) {
+			glColor3f(1.0, 0.0, 0.0);
+			glLineWidth(25);
 			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
