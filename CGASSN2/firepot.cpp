@@ -1,19 +1,33 @@
 #include "firepot.h"
 
-//extern float bottom;
-extern float jumplength;
-extern int NumofPot;
-float BottomofPot = 6.0;
-float HeightofPot = 10.0;
-float RadiusofPot = 10.0;
-float HeightofFire = 15.0;
-float RadiusofFire = 8.0;
-float RadiusofShadow = 6.0;
-float RadiusofBigFire = 18.0;
-float TopofFire = 31.5;
-float WidthofTriangle = 6.5;
+Firepot::Firepot(int jumplength){
+	PotList.push_back((rand()%2+1)*jumplength*2); 
+	BottomofPot = 6.0;
+	HeightofPot = 10.0;
+	RadiusofPot = 10.0;
+	HeightofFire = 15.0;
+	RadiusofFire = 8.0;
+	RadiusofShadow = 6.0;
+	RadiusofBigFire = 18.0;
+	TopofFire = 31.5;
+	WidthofTriangle = 6.5;
+}
 
-void display_firepot(vector<int> PotList, int toggle) {
+void Firepot::init(float _jumplength, float mapsize, int stage){
+	jumplength = _jumplength;
+	// 불항아리 개수/위치 설정 (게임 map 안에 있게끔)
+	for (int i=0; i<mapsize/jumplength; i++) {
+		 // 앞 항아리와 1*jumplength~2*jumplength 의 간격을 갖는 항아리를 생성
+		int position = PotList[i]+((rand()%(7-stage))*jumplength*2);
+		if (position < mapsize)
+			PotList.push_back(position);
+		else
+			break;
+	}
+	NumofPot = PotList.size();
+}
+
+void Firepot::display_firepot(int toggle) {
 	// 항아리를 그리는 부분
 	for (int i = 0; i < NumofPot; i++) {
 		glColor3f(0.5, 0.5, 0.5);

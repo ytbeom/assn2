@@ -9,9 +9,29 @@
 
 using namespace std;
 
+class Firepot{
+public:
 
-	void display_firepot(vector<int> PotList, int toggle);
+	vector<int> PotList;
+	vector<int>::iterator pointer;
+	int NumofPot;
+	int jumplength;
+	float BottomofPot;
+	float HeightofPot;
+	float RadiusofPot;
+	float HeightofFire;
+	float RadiusofFire;
+	float RadiusofShadow;
+	float RadiusofBigFire;
+	float TopofFire;
+	float WidthofTriangle;
 
+	Firepot(int jumplength);
+	void init(float jumplength, float mapsize, int stage);
+	void display_firepot(int toggle);
+
+
+};
 
 
 #endif FIREPOT_H

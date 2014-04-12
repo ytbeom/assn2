@@ -3,25 +3,23 @@
 #include "lion.h"
 #include "firepot.h"
 #include "fireloop.h"
+#include "stage.h"
 
-Lion my_lion;
-vector<int> PotList; // 불항아리의 x 좌표를 저장하는 vector
+
+//vector<int> PotList; // 불항아리의 x 좌표를 저장하는 vector
 vector<int> LoopList; // 불고리의 x 좌표를 저장하는 vector
 float mapsize;
 float bottom = 20.0;
 int jumplength = 80; // 사자가 1회 점프할 때 움직이는 거리
-int NumofPot = 0;
 int NumofLoop;
 int xposition = 0.0;
 extern float RadiusofLoop;
 extern float top;
-extern float RadiusofFire;
-extern float BottomofPot;
-extern float TopofFire;
 int BackgroundChange = 0;
 int translateLoop = 0;
-vector<int> BackgroundX;
-vector<int> BackgroundY;
+Lion my_lion;
+Background my_bg;
+Firepot my_pot(jumplength);
 
 void init(void)
 {
@@ -31,28 +29,12 @@ void init(void)
 
 	srand((unsigned int)time(NULL));
 	
-	// 2000에서 3000 사이의 mapsize 생성
-	mapsize = rand()%1000+2000;
+	// 1000에서 2000 사이의 mapsize 생성
+	mapsize = rand()%1000+1000;
 
-	// 배경 꽃잎의 위치 초기화
-	for (int i = 0; i < mapsize/10; i++) {
-		int x = rand()%((int)mapsize+200)-100;
-		int y = rand()%100+10;
-		BackgroundX.push_back(x);
-		BackgroundY.push_back(y);
-	}
+	my_bg.init(mapsize,bottom,1);
+	my_pot.init(jumplength,mapsize,my_bg.season);
 
-	// 불항아리 개수/위치 설정 (게임 map 안에 있게끔)
-	PotList.push_back(rand()%(jumplength+1)+jumplength*2); // 0~jumplength 사이의 위치에 첫 Pot 생성
-	for (int i=0; i<mapsize/jumplength; i++) {
-		 // 앞 항아리와 jumplength~2*jumplength 의 간격을 갖는 항아리를 생성
-		int position = PotList[i]+(rand()%(jumplength+1)+jumplength*2);
-		if (position < mapsize)
-			PotList.push_back(position);
-		else
-			break;
-	}
-	NumofPot = PotList.size();
 
 	// 불고리 개수/위치 설정 (게임 map 밖에 있어도 됨)
 	NumofLoop = rand()%1000+500; // 500에서 1000개 사이의 Loop 생성
@@ -65,11 +47,10 @@ void init(void)
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 }
-
 int collision(){
 
-	for(int i = 0; i < NumofPot; i++){
-		if(my_lion.IsCollisionPot(PotList[i]/2, (BottomofPot + TopofFire)/2, RadiusofFire/2))
+	for(int i = 0; i < my_pot.NumofPot; i++){
+		if(my_lion.IsCollisionPot(my_pot.PotList[i]/2, (my_pot.BottomofPot + my_pot.TopofFire)/2, my_pot.RadiusofFire/2))
 			return true;
 	}
 	
@@ -85,67 +66,13 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//하늘 바탕?
-	glColor3f(0.529,0.807,0.980);
-	glRectf(-mapsize,10,mapsize+200,100);
-	
-	// 게임 화면 바닥을 분홍색으로 색칠
-	glColor3f(1.0,0.5,0.5);
-	glRectf(-mapsize,0,mapsize+200,bottom-10);
-
-	// 꽃잎 그리기
-	if (BackgroundChange < 9) {
+	if (BackgroundChange < 9) 
 		BackgroundChange++;
-		for (int i = 0; i < BackgroundX.size(); i++) {
-			glColor3f(1.0,0.4,0.4);
-			glBegin(GL_POLYGON);
-			glVertex2f(BackgroundX[i], BackgroundY[i]);
-			glVertex2f(BackgroundX[i]+1, BackgroundY[i]);
-			glVertex2f(BackgroundX[i]+1, BackgroundY[i]+1);
-			glVertex2f(BackgroundX[i], BackgroundY[i]+1);
-			glEnd();
-		}
-	}
-	else { // 꽃잎 위치 update
-		BackgroundX.clear();
-		BackgroundY.clear();
-		for (int i = 0; i < mapsize/10; i++) {
-			int x = rand()%((int)mapsize+200)-100;
-			int y = rand()%100+10;
-			BackgroundX.push_back(x);
-			BackgroundY.push_back(y);
-		}
-		BackgroundChange = 0;
-		for (int i = 0; i < BackgroundX.size(); i++) {
-			glColor3f(1.0,0.4,0.4);
-			glBegin(GL_POLYGON);
-			glVertex2f(BackgroundX[i], BackgroundY[i]);
-			glVertex2f(BackgroundX[i]+1, BackgroundY[i]);
-			glVertex2f(BackgroundX[i]+1, BackgroundY[i]+1);
-			glVertex2f(BackgroundX[i], BackgroundY[i]+1);
-			glEnd();
-		}
-	}
+	else
+		BackgroundChange=0;
 
-	// 시작 위치에 노란색 깃발 표시
-	glColor3f(1.0, 1.0, 0.0);
-	glLineWidth(5);
-	glBegin(GL_LINE_STRIP);
-	glVertex2f(-10, 6);
-	glVertex2f(-10, 46);
-	glVertex2f(-10+20, 36);
-	glVertex2f(-10, 30);
-	glEnd();
-
-	// 끝나는 위치에 노란색 깃발 표시
-	glColor3f(1.0, 1.0, 0.0);
-	glLineWidth(5);
-	glBegin(GL_LINE_STRIP);
-	glVertex2f(mapsize, 6);
-	glVertex2f(mapsize, 46);
-	glVertex2f(mapsize+20, 36);
-	glVertex2f(mapsize, 30);
-	glEnd();
+	
+	my_bg.draw(BackgroundChange);
 
 	if (!collision() && my_lion.x > mapsize) {
 		my_lion.drawClear(my_lion);
@@ -176,7 +103,7 @@ void display(void)
 		//draw firepot
 		glPushMatrix();
 		glScalef(0.5f,0.5f,1.0f);
-		display_firepot(PotList, BackgroundChange);
+		my_pot.display_firepot(BackgroundChange);
 		glPopMatrix();
 
 
