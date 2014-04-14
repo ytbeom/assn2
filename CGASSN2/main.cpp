@@ -92,7 +92,10 @@ void display(void)
 
 		//draw lion
 		my_lion.drawLeg();
+		glPushMatrix();
+		glTranslatef(my_lion.x,my_lion.y,0);
 		my_lion.drawLion();
+		glPopMatrix();
 
 		//translate Loop
 		glPushMatrix();

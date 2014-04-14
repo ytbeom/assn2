@@ -32,6 +32,13 @@ public:
 	void drawLion();
 	void drawDeath(Lion my_lion);
 	void drawClear(Lion my_lion);
+
+	// assignment2 functions
+	void drawTorso();
+	void drawHead();
+	void drawTail();
+	void drawUpperLeg();
+	void drawLowerLeg();
 	int IsCollisionPot(float x, float y, float radius);
 	int IsCollisionLoop(float x, float y, float radius);
 };
