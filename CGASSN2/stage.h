@@ -47,6 +47,7 @@ public:
 	void init(float mapsize, float bottom, int season);
 	void draw(int BackgroundChange);
 	void drawFlying(int season, float X, float Y);
+	void info(float lion_x);
 
 };
 

@@ -175,3 +175,31 @@ void Background::drawFlying(int season, float X, float Y){
 	}
 
 }
+
+void Background::info(float lion_x){
+	void *font = GLUT_BITMAP_TIMES_ROMAN_24;
+	char string[] ="STAGE : ";
+	glColor3f(0,0,0.5);
+	glRasterPos2f(lion_x+120,90);
+	int len = 8;
+	for(int i=0;i<len;i++)
+		glutBitmapCharacter(font,string[i]);
+	char print_stage;
+	print_stage=season+48;
+	glutBitmapCharacter(font,print_stage);
+
+
+	glColor3f(1,0,0);
+	glBegin(GL_POLYGON);
+	glVertex2f(lion_x+145, 91);
+	int now=lion_x;
+	if(lion_x<0)
+		now=0;
+	for( float angle = 0;angle<((now/mapsize)*2)*PI;angle+=0.1){
+		float x = lion_x+145+2*cos(angle);
+		float y = 91+2*sin(angle);
+		glVertex2f(x,y);
+	}
+	glEnd();
+
+}
