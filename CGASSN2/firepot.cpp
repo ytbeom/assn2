@@ -13,9 +13,11 @@ Firepot::Firepot(int jumplength){
 	WidthofTriangle = 6.5;
 }
 
-void Firepot::init(float _jumplength, float mapsize, int stage){
+void Firepot::init(int _jumplength, float mapsize, int stage){
 	jumplength = _jumplength;
 	// 불항아리 개수/위치 설정 (게임 map 안에 있게끔)
+	PotList.clear();
+	PotList.push_back((rand()%2+1)*jumplength*2);
 	for (int i=0; i<mapsize/jumplength; i++) {
 		 // 앞 항아리와 1*jumplength~2*jumplength 의 간격을 갖는 항아리를 생성
 		int position = PotList[i]+((rand()%(7-stage))*jumplength*2);
