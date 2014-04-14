@@ -22,8 +22,8 @@ public:
 
 	Fireloop(int jumplength);
 	void init(int jumplentgh, float mapsize, int stage);
-	void display_fireloop_front(int toggle);
-	void display_fireloop_back(int toggle);
+	void display_fireloop_front(int toggle,float lion_x,int translateLoop);
+	void display_fireloop_back(int toggle,float lion_x,int translateLoop);
 	//void update_fireloop(vector<int> LoopList);
 };
 #endif FIRELOOP_H

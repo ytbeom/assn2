@@ -1,8 +1,5 @@
 #include "stage.h"
 
-
-
-
 Background::Background(){
 	season = 1;
 	int i;
@@ -26,7 +23,7 @@ void Background::init(float _mapsize, float _bottom, int _season){
 	for (int i = 0; i < 200; i++) {
 		int d = (rand())%((int)mapsize);
 		dec[i] = d;
-		printf("%d\n",d);
+		//printf("%d\n",d);
 	}
 
 }
@@ -70,42 +67,22 @@ void Background::draw(int BackgroundChange){
 			}
 		}
 		if(season!=2){
-		// ²ÉÀÙ ±×¸®±â
-		if (BackgroundChange < 9) {
-			for (unsigned int i = 0; i < BackgroundX.size(); i++) {
-				if(season==1)
-					glColor3f(1.0,0.4,0.4);
-				else if(season==3)
-					glColor3f(1,(float)(rand()%10)/10,0);
-				int fsize = 1;
-				glBegin(GL_POLYGON);
-				glVertex2f(BackgroundX[i], BackgroundY[i]);
-				glVertex2f(BackgroundX[i]+fsize, BackgroundY[i]);
-				glVertex2f(BackgroundX[i]+fsize, BackgroundY[i]+fsize);
-				glVertex2f(BackgroundX[i], BackgroundY[i]+fsize);
-				glEnd();
+			// ²ÉÀÙ ±×¸®±â
+			if (BackgroundChange < 9) {
+				for (unsigned int i = 0; i < BackgroundX.size(); i++) {
+					drawFlying(season,BackgroundX[i],BackgroundY[i]);
+				}
 			}
-		}
-		else { // ²ÉÀÙ À§Ä¡ update
-			BackgroundX.clear();
-			BackgroundY.clear();
-			for (int i = 0; i < mapsize/10; i++) {
-				int x = rand()%((int)mapsize+200)-100;
-				int y = rand()%100+10;
-				BackgroundX.push_back(x);
-				BackgroundY.push_back(y);
+			else { // ²ÉÀÙ À§Ä¡ update
+				BackgroundX.clear();
+				BackgroundY.clear();
+				for (int i = 0; i < mapsize/10; i++) {
+					int x = rand()%((int)mapsize+200)-100;
+					int y = rand()%100+10;
+					BackgroundX.push_back(x);
+					BackgroundY.push_back(y);
+				}		
 			}
-			for (unsigned int i = 0; i < BackgroundX.size(); i++) {
-			//	glColor3f(1.0,0.4,0.4);
-				glBegin(GL_POLYGON);
-				glVertex2f(BackgroundX[i], BackgroundY[i]);
-				glVertex2f(BackgroundX[i]+1, BackgroundY[i]);
-				glVertex2f(BackgroundX[i]+1, BackgroundY[i]+1);
-				glVertex2f(BackgroundX[i], BackgroundY[i]+1);
-				glEnd();
-			}
-		
-		}
 		}
 	// ½ÃÀÛ À§Ä¡¿¡ ³ë¶õ»ö ±ê¹ß Ç¥½Ã
 	glColor3f(1.0, 1.0, 0.0);
@@ -130,25 +107,70 @@ void Background::draw(int BackgroundChange){
 
 void Background::drawFlying(int season, float X, float Y){
 	
-	int color;
-	color = rand()%2;
-
-	if(color=0){
-		glColor3f(1,0,0);
-		glBegin(GL_POLYGON);
-		glVertex2f(X, Y);
-		glVertex2f(X+1, Y);
-		glVertex2f(X+1, Y+1);
-		glVertex2f(X, Y+1);
-		glEnd();
+	if(season==3){
+		int color;
+		color = (int)X%2;
+		if(color==0){//´ÜÇ³
+			glPushMatrix();
+			glRotatef(((int)X*10)%360,0,0,1);
+			glColor3f(1,0,0);
+			glBegin(GL_TRIANGLES);
+			glVertex2f(X+1,Y);
+			glVertex2f(X-2,Y+0.5);
+			glVertex2f(X+1,Y+1);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+			glVertex2f(X,Y+1);
+			glVertex2f(X+1.5,Y+2.5);
+			glVertex2f(X+1,Y+0.5);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+			glVertex2f(X,Y);
+			glVertex2f(X+1.5,Y-1.5);
+			glVertex2f(X+1,Y+0.5);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+			glVertex2f(X,Y+0.5);
+			glVertex2f(X-1.5,Y+2.5);
+			glVertex2f(X+0.5,Y+1);
+			glEnd();
+			glBegin(GL_TRIANGLES);
+			glVertex2f(X,Y+0.5);
+			glVertex2f(X-1.5,Y-1.5);
+			glVertex2f(X+0.5,Y);
+			glEnd();
+			glBegin(GL_POLYGON);
+			glVertex2f(X, Y);
+			glVertex2f(X+1, Y);
+			glVertex2f(X+1, Y+1);
+			glVertex2f(X, Y+1);
+			glEnd();
+			glPopMatrix();
+		}
+		else{//ÀºÇà
+			glColor3f(1,1,0);
+			glPushMatrix();
+			glRotatef(((int)X*10)%360,0,0,1);
+			glBegin(GL_POLYGON);
+			glVertex2f(X, Y);
+			for( float angle = (-3.0/6.0)*PI;angle<(1.1/6.0)*PI;angle+=0.1){
+				float x = X+2*cos(angle);
+				float y = Y+2*sin(angle);
+				glVertex2f(x,y);
+			}
+			glEnd();
+			glPopMatrix();	
+		}
 	}
 	else{
-		glColor3f(1,1,0);
+		if(season==1)
+			glColor3f(1.0,0.4,0.4);
+		int fsize = 1;
 		glBegin(GL_POLYGON);
 		glVertex2f(X, Y);
-		glVertex2f(X+1, Y);
-		glVertex2f(X+1, Y+1);
-		glVertex2f(X, Y+1);
+		glVertex2f(X+fsize, Y);
+		glVertex2f(X+fsize, Y+fsize);
+		glVertex2f(X, Y+fsize);
 		glEnd();
 	}
 

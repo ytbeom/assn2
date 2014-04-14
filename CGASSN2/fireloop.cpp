@@ -23,86 +23,124 @@ void Fireloop::init(int _jumplength, float _mapsize, int stage){
 	mapsize = _mapsize;
 }
 
-void Fireloop::display_fireloop_front(int toggle) {
+void Fireloop::display_fireloop_front(int toggle,float lion_x,int translateLoop) {
 	// 고리의 앞부분을 그리는 부분, 사자보다 먼저 그려져야 함
-	
+		//printf(" translate Loop : %d\n",translateLoop);
 	for (int i = 0; i < NumofLoop; i++) {
-		if (LoopList[i] < mapsize+200) {
+		
+		if(lion_x-100<LoopList[i]+translateLoop&&LoopList[i]+translateLoop<lion_x+1000){
 			glColor3f(1.0, 0.0, 0.0);
-			glLineWidth(25);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/3;
-				y += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-1,y+2);
+				glVertex2f(x-2,y);
+				glVertex2f(x-1,y-2);
+				glVertex2f(x+1,y-2);
+				glVertex2f(x+2,y);
+				glVertex2f(x+1,y+2);
+				glEnd();
+				glPopMatrix();
 				}
-			glEnd();
 			glColor3f(1.0, 0.7, 0.0);
-			glLineWidth(5);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-0.5,y+2);
+				glVertex2f(x-1,y);
+				glVertex2f(x-0.5,y-2);
+				glVertex2f(x+0.5,y-2);
+				glVertex2f(x+1,y);
+				glVertex2f(x+0.5,y+2);
+				glEnd();
+				glPopMatrix();
 				}
-			glEnd();
 			glColor3f(1.0, 0.5, 0.0);
-			glLineWidth(5);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/3;
-				y += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-0.2,y+2);
+				glVertex2f(x-0.3,y);
+				glVertex2f(x-0.2,y-2);
+				glVertex2f(x+0.2,y-2);
+				glVertex2f(x+0.3,y);
+				glVertex2f(x+0.2,y+2);
+				glEnd();
+				glPopMatrix();
 				}
-			glEnd();
 		}
+	}
 			
 
-	}
+	
 }
 
-void Fireloop::display_fireloop_back(int toggle) {
+void Fireloop::display_fireloop_back(int toggle,float lion_x,int translateLoop) {
 	// 고리의 뒷부분을 그리는 부분, 사자보다 나중에 그려져야 함
-	
 	for (int i = 0; i < NumofLoop; i++) {
-		if (LoopList[i] < mapsize+200) {
+		if(lion_x-100<LoopList[i]+translateLoop&&LoopList[i]+translateLoop<lion_x+1000){
+			if(LoopList[i]+translateLoop==lion_x)
+				printf("same\n");
 			glColor3f(1.0, 0.0, 0.0);
-			glLineWidth(25);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/3;
-				y += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-1,y+2);
+				glVertex2f(x-2,y);
+				glVertex2f(x-1,y-2);
+				glVertex2f(x+1,y-2);
+				glVertex2f(x+2,y);
+				glVertex2f(x+1,y+2);
+				glEnd();
+				glPopMatrix();
 			}
-			glEnd();
 			glColor3f(1.0, 0.7, 0.0);
-			glLineWidth(5);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-0.5,y+2);
+				glVertex2f(x-1,y);
+				glVertex2f(x-0.5,y-2);
+				glVertex2f(x+0.5,y-2);
+				glVertex2f(x+1,y);
+				glVertex2f(x+0.5,y+2);
+				glEnd();
+				glPopMatrix();
 			}
-			glEnd();
+
 			glColor3f(1.0, 0.5, 0.0);
-			glLineWidth(5);
-			glBegin(GL_LINE_STRIP);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
-				x += ((rand()%10)-5)/3;
-				y += ((rand()%10)-5)/4;
-				glVertex2f(x, y);
+				glPushMatrix();
+				glTranslatef(rand()%2,0,0);
+				glBegin(GL_POLYGON);
+				glVertex2f(x-0.2,y+2);
+				glVertex2f(x-0.3,y);
+				glVertex2f(x-0.2,y-2);
+				glVertex2f(x+0.2,y-2);
+				glVertex2f(x+0.3,y);
+				glVertex2f(x+0.2,y+2);
+				glEnd();
+				glPopMatrix();
 			}
-			glEnd();
+
 		}
 	}
+	
 }

@@ -5,19 +5,14 @@
 #include "fireloop.h"
 #include "stage.h"
 
-
-//vector<int> PotList; // 불항아리의 x 좌표를 저장하는 vector
-//vector<int> LoopList; // 불고리의 x 좌표를 저장하는 vector
 float mapsize;
 float bottom = 20.0;
 int jumplength = 80; // 사자가 1회 점프할 때 움직이는 거리
-//int NumofLoop;
 int xposition = 0.0;
-//extern float RadiusofLoop;
-//extern float top;
 int BackgroundChange = 0;
 int translateLoop;
 int stage=1;
+
 Lion my_lion;
 Background my_bg;
 Firepot my_pot(jumplength);
@@ -33,26 +28,24 @@ void init(void)
 	srand((unsigned int)time(NULL));
 	
 	// 1000에서 2000 사이의 mapsize 생성
-	mapsize = rand()%1000+000;
-
+//	mapsize = rand()%1000+1000;
+	mapsize = 100;
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
 	my_loop.init(jumplength,mapsize,stage);
-
-	
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 }
 int collision(){
-
+	/*
 	for(int i = 0; i < my_pot.NumofPot; i++){
 		if(my_lion.IsCollisionPot(my_pot.PotList[i]/2, (my_pot.BottomofPot + my_pot.TopofFire)/2, my_pot.RadiusofFire/2))
 			return true;
 	}
-/*	
-	for(int i = 0; i < NumofLoop; i++){
-		if(my_lion.IsCollisionLoop(LoopList[i]+translateLoop, top - RadiusofLoop, RadiusofLoop))
+	
+	for(int i = 0; i < my_loop.NumofLoop; i++){
+		if(my_lion.IsCollisionLoop(my_loop.LoopList[i]+translateLoop, my_loop.top - my_loop.RadiusofLoop, my_loop.RadiusofLoop))
 			return true;
 	}
 	*/
@@ -93,7 +86,7 @@ void display(void)
 		//translate Loop
 		glPushMatrix();
 		glTranslatef(translateLoop,0,0);
-		my_loop.display_fireloop_front(BackgroundChange);
+		my_loop.display_fireloop_front(BackgroundChange, my_lion.x, translateLoop);
 		glPopMatrix();
 
 		//draw lion
@@ -103,7 +96,7 @@ void display(void)
 		//translate Loop
 		glPushMatrix();
 		glTranslatef(translateLoop,0,0);
-		my_loop.display_fireloop_back(BackgroundChange);
+		my_loop.display_fireloop_back(BackgroundChange, my_lion.x, translateLoop);
 		glPopMatrix();
 
 		//draw firepot
@@ -275,7 +268,10 @@ void reshape(int w, int h)
 }
 
 void moveObjects(int) {
-	translateLoop-=1;
+	if(stage<3)
+		translateLoop-=1;
+	else
+		translateLoop-=(float)stage/2+(float)(stage%2)/2;
 	glutPostRedisplay();
 	
 	glutSpecialFunc(specialkeyboard);
