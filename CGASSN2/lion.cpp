@@ -31,20 +31,18 @@ Lion::Lion() {
 }
 
 int Lion::IsCollisionPot(float _x, float _y, float _radius){
-/*	if(_x-_radius < x+0.2*size && _x+_radius > x-0.8*size) {
+	if(_x-_radius < x+0.2*size && _x+_radius > x-0.8*size) {
 		if(y-0.7*size < _y)
 			return true;
 	}
-	*/
 	return false;
 }
 
 int Lion::IsCollisionLoop(float _x, float _y, float _radius){
-/*	if(_x < x+0.3*size && x-0.7*size < _x){
+	if(_x < x+0.3*size && x-0.7*size < _x){
 		if(!(y-0.7*size>_y-_radius&&y+0.5*size<_y+_radius))
 			return true;
 	}
-	*/
 	return false;
 }
 
