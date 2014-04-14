@@ -41,10 +41,12 @@ public:
 	vector<int>::iterator pointerX;
 	vector<int> BackgroundY;
 	vector<int>::iterator pointerY;
+	int dec[200];
 
 	Background();
 	void init(float mapsize, float bottom, int season);
 	void draw(int BackgroundChange);
+	void drawFlying(int season, float X, float Y);
 
 };
 

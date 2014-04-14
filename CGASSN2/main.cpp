@@ -17,6 +17,7 @@ extern float RadiusofLoop;
 extern float top;
 int BackgroundChange = 0;
 int translateLoop = 0;
+int stage=1;
 Lion my_lion;
 Background my_bg;
 Firepot my_pot(jumplength);
@@ -30,10 +31,10 @@ void init(void)
 	srand((unsigned int)time(NULL));
 	
 	// 1000에서 2000 사이의 mapsize 생성
-	mapsize = rand()%1000+1000;
+	mapsize = rand()%1000+000;
 
-	my_bg.init(mapsize,bottom,1);
-	my_pot.init(jumplength,mapsize,my_bg.season);
+	my_bg.init(mapsize,bottom,stage);
+	my_pot.init(jumplength,mapsize,stage);
 
 
 	// 불고리 개수/위치 설정 (게임 map 밖에 있어도 됨)
@@ -53,12 +54,12 @@ int collision(){
 		if(my_lion.IsCollisionPot(my_pot.PotList[i]/2, (my_pot.BottomofPot + my_pot.TopofFire)/2, my_pot.RadiusofFire/2))
 			return true;
 	}
-	
+/*	
 	for(int i = 0; i < NumofLoop; i++){
 		if(my_lion.IsCollisionLoop(LoopList[i]+translateLoop, top - RadiusofLoop, RadiusofLoop))
 			return true;
 	}
-
+	*/
 	return false;
 }
 
@@ -74,14 +75,22 @@ void display(void)
 	
 	my_bg.draw(BackgroundChange);
 
-	if (!collision() && my_lion.x > mapsize) {
+	if (!collision() && my_lion.x > mapsize && my_bg.season<4) {
+		my_lion.drawClear(my_lion);
+		glFlush();
+		glutSwapBuffers();
+		Sleep(2000);
+		stage++;
+		init();
+		//exit(1);
+	}
+	else if (!collision() && my_lion.x > mapsize && my_bg.season==4) {
 		my_lion.drawClear(my_lion);
 		glFlush();
 		glutSwapBuffers();
 		Sleep(2000);
 		exit(1);
 	}
-
 	else if(!collision()) {
 
 		//translate Loop
