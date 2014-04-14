@@ -12,6 +12,7 @@ int xposition = 0.0;
 int BackgroundChange = 0;
 int translateLoop;
 int stage=1;
+int noshakeX;
 
 Lion my_lion;
 Background my_bg;
@@ -82,6 +83,7 @@ void Stop(int value){
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	noshakeX = my_lion.x;
 
 	// 좌우 화살표를 입력받아 계속 이동하게끔 하는 부분
 	bool right = ((GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000);
@@ -219,6 +221,10 @@ void Jump(int value){
 		if(jump_upX<81)
 			jump_upX+=1;
 			print_x = jump_upX;
+		gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();	
+		glutPostRedisplay();
 	}
 
 	my_lion.y = bottom + 60 - 0.066*(print_x-30)*(print_x-30);
@@ -248,48 +254,14 @@ void specialkeyboard(int key, int x, int y)
 			jump_initX = my_lion.x;
 			glutTimerFunc(2000/60,Jump,1);
 		}
+		gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
 		break;
 	case GLUT_KEY_DOWN:
 		my_lion.velocity = 0.0;
 		my_lion.state=0;
+		gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
 		break;
-	//case GLUT_KEY_RIGHT:
-/*		if (my_lion.y==bottom) {
-			my_lion.x += 1;
-			my_lion.velocity += 0.05;
-			if(my_lion.velocity<0)
-				my_lion.velocity=0;
-
-			// state change
-			if (my_lion.c_state == 3) {
-				my_lion.state = (my_lion.state+1)%8;
-				my_lion.c_state = 0;
-			}
-			else 
-				my_lion.c_state++;
-
-			glutTimerFunc(100, Stop, 1);
-		}	
-		*/
-	//	break;
-	//case GLUT_KEY_LEFT:
-/*		if(my_lion.y==bottom){
-			my_lion.x -= 1;
-			my_lion.velocity -= 0.05;
-			if(my_lion.velocity>0)
-				my_lion.velocity=0;
-			// state change
-			if (my_lion.c_state == 3) {
-				my_lion.state = (my_lion.state+1)%8;
-				my_lion.c_state = 0;
-			}
-			else 
-				my_lion.c_state++;
-			glutTimerFunc(100, Stop, 1);
-		}*/
-	//	break;
 	}
-	gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();	
 	glutPostRedisplay();
@@ -301,9 +273,9 @@ void reshape(int w, int h)
 	// gluOrtho2D update
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
-	gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
+	gluOrtho2D(-50+noshakeX, 150+noshakeX, 0, 100);
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glLoadIdentity();
 }
 
 void moveObjects(int) {
@@ -313,7 +285,7 @@ void moveObjects(int) {
 		translateLoop-=(float)stage/2+(float)(stage%2)/2;
 	glutPostRedisplay();
 	
-//	glutSpecialFunc(specialkeyboard);
+	glutSpecialFunc(specialkeyboard);
 	glutTimerFunc(2000/60,moveObjects,1);
 }
 
