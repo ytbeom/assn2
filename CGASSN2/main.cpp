@@ -12,8 +12,7 @@ int xposition = 0.0;
 int BackgroundChange = 0;
 int translateLoop;
 int stage=1;
-bool started = false;
-
+int startfresh;
 Lion my_lion;
 Background my_bg;
 Firepot my_pot(jumplength);
@@ -21,7 +20,6 @@ Fireloop my_loop(jumplength);
 
 void init(void)
 {
-	started = true;
 	my_lion.x = 0;
 	my_lion.y = bottom;
 	my_lion.size = 20;
@@ -29,12 +27,12 @@ void init(void)
 	my_lion.state = 2;
 	my_lion.jump_state = 0;
 	translateLoop=0;
-
+	startfresh=0;
 	srand((unsigned int)time(NULL));
 	
 	// 1000에서 2000 사이의 mapsize 생성
-//	mapsize = rand()%1000+1000;
-	mapsize = 200;
+	mapsize = rand()%1000+1000;
+//	mapsize = 200;
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
 	my_loop.init(jumplength,mapsize,stage);
@@ -44,7 +42,7 @@ void init(void)
 }
 
 int collision(){
-	for(int i = 0; i < my_pot.NumofPot; i++){
+/*	for(int i = 0; i < my_pot.NumofPot; i++){
 		if(my_lion.IsCollisionPot(my_pot.PotList[i]/2, (my_pot.BottomofPot + my_pot.TopofFire)/2, my_pot.RadiusofFire/2))
 			return true;
 	}
@@ -52,7 +50,7 @@ int collision(){
 	for(int i = 0; i < my_loop.NumofLoop; i++){
 		if(my_lion.IsCollisionLoop(my_loop.LoopList[i]+translateLoop, my_loop.top - my_loop.RadiusofLoop, my_loop.RadiusofLoop))
 			return true;
-	}
+	}*/
 	return false;
 }
 
@@ -107,10 +105,10 @@ void display(void)
 	}
 	else if(!collision()) {		
 		my_bg.draw(BackgroundChange);
-		
+		my_bg.info(my_lion.x);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-
+		startfresh=1;
 		bool right = ((GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000);
 		bool left = ((GetAsyncKeyState(VK_LEFT) & 0x8000) == 0x8000);
 		if(right) {
@@ -241,11 +239,11 @@ void Jump(int jump_direction){
 
 void specialkeyboard(int key, int x, int y)
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
 	switch (key) {
 	case GLUT_KEY_UP:
-		if(my_lion.y == bottom) {
+		if(my_lion.y==bottom&&startfresh==1) {
 			jump_initX = my_lion.x;
 			bool right = ((GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000);
 			bool left = ((GetAsyncKeyState(VK_LEFT) & 0x8000) == 0x8000);
@@ -258,10 +256,10 @@ void specialkeyboard(int key, int x, int y)
 		}
 		break;
 	}
-	gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();	
-	glutPostRedisplay();
+	//gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();	
+	//glutPostRedisplay();
 }
 
 void reshape(int w, int h)

@@ -88,8 +88,6 @@ void Fireloop::display_fireloop_back(int toggle,float lion_x,int translateLoop) 
 	// 고리의 뒷부분을 그리는 부분, 사자보다 나중에 그려져야 함
 	for (int i = 0; i < NumofLoop; i++) {
 		if(lion_x-100<LoopList[i]+translateLoop&&LoopList[i]+translateLoop<lion_x+1000){
-			if(LoopList[i]+translateLoop==lion_x)
-				printf("same\n");
 			glColor3f(1.0, 0.0, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
 				float x = LoopList[i] + WidthofLoop * cos(angle);
