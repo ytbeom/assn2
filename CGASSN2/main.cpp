@@ -36,7 +36,6 @@ void init(void)
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
 
-
 	// 불고리 개수/위치 설정 (게임 map 밖에 있어도 됨)
 	NumofLoop = rand()%1000+500; // 500에서 1000개 사이의 Loop 생성
 	LoopList.push_back(rand()%(2*jumplength+1)+jumplength); // 0~2*jumplength 사이의 위치에 첫 Loop 생성
@@ -48,6 +47,7 @@ void init(void)
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 }
+
 int collision(){
 
 	for(int i = 0; i < my_pot.NumofPot; i++){
@@ -63,9 +63,74 @@ int collision(){
 	return false;
 }
 
+// 시간이 지나면 속도가 자동으로 0이 되게끔 하는 함수
+void Stop(int value){
+	int keep;
+	if(my_lion.y!=bottom)
+		keep=0;
+	else{
+		if(my_lion.velocity<0.005 && my_lion.velocity>-0.005){
+			my_lion.velocity=0;
+			//my_lion.state=2;
+			keep=0;
+		}
+		else if(my_lion.velocity>0){
+			keep=1;
+			my_lion.velocity -= 0.005;
+		}
+		else{
+			keep=1;
+			my_lion.velocity += 0.005;
+		}
+	}
+	//printf("%f \n",my_lion.velocity);
+	if(keep)
+		glutTimerFunc(100, Stop, 1);
+}
+
+
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
+	// 좌우 화살표를 입력받아 계속 이동하게끔 하는 부분
+	bool right = ((GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000);
+	bool left = ((GetAsyncKeyState(VK_LEFT) & 0x8000) == 0x8000);
+	if(right) {
+		if (my_lion.y==bottom) {
+			my_lion.x += 1;
+			my_lion.velocity += 0.05;
+
+			if(my_lion.velocity<0)
+				my_lion.velocity=0;
+
+			// state change
+			if (my_lion.c_state == 3) {
+				my_lion.state = (my_lion.state+1)%8;
+				my_lion.c_state = 0;
+			}
+			else 
+				my_lion.c_state++;
+
+			glutTimerFunc(100, Stop, 1);
+		}	
+	}
+	if (left) {
+		if(my_lion.y==bottom){
+			my_lion.x -= 1;
+			my_lion.velocity -= 0.05;
+			if(my_lion.velocity>0)
+				my_lion.velocity=0;
+			// state change
+			if (my_lion.c_state == 3) {
+				my_lion.state = (my_lion.state+1)%8;
+				my_lion.c_state = 0;
+			}
+			else 
+				my_lion.c_state++;
+			glutTimerFunc(100, Stop, 1);
+		}
+	}
 
 	if (BackgroundChange < 9) 
 		BackgroundChange++;
@@ -100,7 +165,7 @@ void display(void)
 		glPopMatrix();
 
 		//draw lion
-		my_lion.drawLeg();
+		//my_lion.drawLeg();
 		glPushMatrix();
 		glTranslatef(my_lion.x,my_lion.y,0);
 		my_lion.drawLion();
@@ -118,7 +183,6 @@ void display(void)
 		my_pot.display_firepot(BackgroundChange);
 		glPopMatrix();
 
-
 		glFlush();
 		glutSwapBuffers();
 	}
@@ -132,36 +196,11 @@ void display(void)
 	}
 }
 
-
-void Stop(int value){
-	int keep;
-	if(my_lion.y!=bottom)
-		keep=0;
-	else{
-		if(my_lion.velocity<0.005 && my_lion.velocity>-0.005){
-			my_lion.velocity=0;
-			my_lion.state=0;
-			keep=0;
-		}
-		else if(my_lion.velocity>0){
-			keep=1;
-			my_lion.velocity -= 0.005;
-		}
-		else{
-			keep=1;
-			my_lion.velocity += 0.005;
-		}
-	}
-	//printf("%f \n",my_lion.velocity);
-	if(keep)
-		glutTimerFunc(100, Stop, 1);
-}
-
-
-
 float jump_initX = 0;
 float jump_upX = 0;
 void Jump(int value){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
 	int keep = 1;
 	float print_x;
@@ -171,15 +210,21 @@ void Jump(int value){
 		my_lion.state=1;
 		print_x = my_lion.x-jump_initX;
 		my_lion.x += 1;
+		gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();	
+		glutPostRedisplay();
 	}
-
 	//jumb backward
 	else if(my_lion.velocity<0){
 		my_lion.state=1;
 		print_x = jump_initX-my_lion.x;
 		my_lion.x -= 1;
+		gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();	
+		glutPostRedisplay();
 	}
-
 	//jump up
 	else{
 		my_lion.state=2;
@@ -202,14 +247,11 @@ void Jump(int value){
 	}
 	if(keep)
 		glutTimerFunc(2000/60, Jump, 1);
+	
 }
-
-
 
 void specialkeyboard(int key, int x, int y)
 {
-	// TODO
-	// 키보드 입력(좌, 우, 상) 받아서 이벤트 발생시키기
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	switch (key) {
@@ -223,44 +265,41 @@ void specialkeyboard(int key, int x, int y)
 		my_lion.velocity = 0.0;
 		my_lion.state=0;
 		break;
-	case GLUT_KEY_RIGHT:
-		if(my_lion.y==bottom){
+	//case GLUT_KEY_RIGHT:
+/*		if (my_lion.y==bottom) {
 			my_lion.x += 1;
 			my_lion.velocity += 0.05;
 			if(my_lion.velocity<0)
 				my_lion.velocity=0;
-			if(my_lion.c_state>5){
-				my_lion.c_state++;
-				if(my_lion.c_state==10)
-					my_lion.c_state=0;
-				my_lion.state=2;
+
+			// state change
+			if (my_lion.c_state == 3) {
+				my_lion.state = (my_lion.state+1)%8;
+				my_lion.c_state = 0;
 			}
-			else{
+			else 
 				my_lion.c_state++;
-				my_lion.state=1;
-			}
+
 			glutTimerFunc(100, Stop, 1);
-		}			
-		break;
-	case GLUT_KEY_LEFT:
-		if(my_lion.y==bottom){
+		}	
+		*/
+	//	break;
+	//case GLUT_KEY_LEFT:
+/*		if(my_lion.y==bottom){
 			my_lion.x -= 1;
 			my_lion.velocity -= 0.05;
 			if(my_lion.velocity>0)
 				my_lion.velocity=0;
-			if(my_lion.c_state>5){
-				my_lion.c_state++;
-				if(my_lion.c_state==10)
-					my_lion.c_state=0;
-				my_lion.state=2;
+			// state change
+			if (my_lion.c_state == 3) {
+				my_lion.state = (my_lion.state+1)%8;
+				my_lion.c_state = 0;
 			}
-			else{
+			else 
 				my_lion.c_state++;
-				my_lion.state=1;
-			}
 			glutTimerFunc(100, Stop, 1);
-		}
-		break;
+		}*/
+	//	break;
 	}
 	gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
 	glMatrixMode(GL_MODELVIEW);
@@ -274,8 +313,7 @@ void reshape(int w, int h)
 	// gluOrtho2D update
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(-50+xposition, 150+xposition, 0, 100);
+	gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
@@ -284,9 +322,8 @@ void moveObjects(int) {
 	translateLoop-=1;
 	glutPostRedisplay();
 	
-	glutSpecialFunc(specialkeyboard);
+//	glutSpecialFunc(specialkeyboard);
 	glutTimerFunc(2000/60,moveObjects,1);
-	
 }
 
 int main(int argc, char** argv)
@@ -300,7 +337,8 @@ int main(int argc, char** argv)
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
-	
+	glutSpecialFunc(specialkeyboard);
+
 	glutTimerFunc(2000/60,moveObjects,1);
 	glutMainLoop();
 }

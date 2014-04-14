@@ -3,19 +3,48 @@
 extern float WidthofLoop;
 extern float mapsize;
 
+Lion::Lion() {
+	x = 0; 
+	y = 0; 
+	size = 1; 
+	state = 0; 
+	c_state = 0; 
+	jump_state = 0;
+	// angle list initialize
+	thigh_angle_list[0] = -30.0;
+	thigh_angle_list[1] = -15.0;
+	thigh_angle_list[2] = 0.0;
+	thigh_angle_list[3] = 15.0;
+	thigh_angle_list[4] = 30.0;
+	thigh_angle_list[5] = 15.0;
+	thigh_angle_list[6] = 0;
+	thigh_angle_list[7] = -15.0;
+	// knee list initialize
+	knee_angle_list[0] = -20.0;
+	knee_angle_list[1] = -15.0;
+	knee_angle_list[2] = 0.0;
+	knee_angle_list[3] = 0.0;
+	knee_angle_list[4] = 15.0;
+	knee_angle_list[5] = 0.0;
+	knee_angle_list[6] = 0.0;
+	knee_angle_list[7] = -15.0;
+}
+
 int Lion::IsCollisionPot(float _x, float _y, float _radius){
-	if(_x-_radius < x+0.2*size && _x+_radius > x-0.8*size){
+/*	if(_x-_radius < x+0.2*size && _x+_radius > x-0.8*size) {
 		if(y-0.7*size < _y)
 			return true;
 	}
+	*/
 	return false;
 }
 
 int Lion::IsCollisionLoop(float _x, float _y, float _radius){
-	if(_x < x+0.3*size && x-0.7*size < _x){
+/*	if(_x < x+0.3*size && x-0.7*size < _x){
 		if(!(y-0.7*size>_y-_radius&&y+0.5*size<_y+_radius))
 			return true;
 	}
+	*/
 	return false;
 }
 
@@ -356,44 +385,62 @@ glEnd();
 */
 
 // assignment2 drawLion function
+	
+	// 시작은 Torso의 기준점, 겹치는 문제 때문에 다리를 먼저그림
+	
+	// 앞쪽 왼다리
+	glColor3f(1.0,0.9,0.0);
+	glPushMatrix();
+	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
+	glTranslatef(-0.23*size,-0.35*size,0);
+	glRotatef(thigh_angle_list[state],0.0,0.0,1.0);
+	drawUpperLeg();
+	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
+	glTranslatef(0,-0.17*size,0);
+	glRotatef(knee_angle_list[state],0.0,0.0,1.0);
+	drawLowerLeg();
+	glPopMatrix();	
+
+	// 앞쪽 오른다리
+	glColor3f(1.0,1.0,0.0);
+	glPushMatrix();
+	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
+	glTranslatef(-0.1*size,-0.35*size,0);
+	glRotatef(thigh_angle_list[(state+0)%8],0.0,0.0,1.0);
+	drawUpperLeg();
+	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
+	glTranslatef(0,-0.17*size,0);
+	glRotatef(knee_angle_list[(state+0)%8],0.0,0.0,1.0);
+	drawLowerLeg();
+	glPopMatrix();
+
+	// 뒷쪽 왼다리
+	glColor3f(1.0,0.9,0.0);
+	glPushMatrix();
+	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
+	glTranslatef(-0.9*size,-0.35*size,0);
+	glRotatef(thigh_angle_list[(state+4)%8],0.0,0.0,1.0);
+	drawUpperLeg();
+	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
+	glTranslatef(0,-0.17*size,0);
+	glRotatef(thigh_angle_list[(state+4)%8],0.0,0.0,1.0);
+	drawLowerLeg();
+	glPopMatrix();
+
+	// 뒷쪽 오른다리
+	glColor3f(1.0,1.0,0.0);
+	glPushMatrix();
+	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
+	glTranslatef(-0.77*size,-0.35*size,0);
+	glRotatef(thigh_angle_list[(state+4)%8],0.0,0.0,1.0);
+	drawUpperLeg();
+	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
+	glTranslatef(0,-0.17*size,0);
+	glRotatef(thigh_angle_list[(state+4)%8],0.0,0.0,1.0);
+	drawLowerLeg();
+	glPopMatrix();
+
 	drawTorso();
-
-	glPushMatrix();
-	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
-	glTranslatef(-0.1*size,-0.37*size,0);
-	drawUpperLeg();
-	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
-	glTranslatef(0,-0.17*size,0);
-	drawLowerLeg();
-	glPopMatrix();
-/*
-	glPushMatrix();
-	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
-	glTranslatef(-0.1*size,-0.37*size,0);
-	drawUpperLeg();
-	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
-	glTranslatef(0,-0.17*size,0);
-	drawLowerLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
-	glTranslatef(-0.1*size,-0.37*size,0);
-	drawUpperLeg();
-	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
-	glTranslatef(0,-0.17*size,0);
-	drawLowerLeg();
-	glPopMatrix();
-
-	glPushMatrix();
-	// Torso의 기준점에서 앞쪽 다리의 상대적인 위치로 변환
-	glTranslatef(-0.1*size,-0.37*size,0);
-	drawUpperLeg();
-	// 위쪽 다리와 아랫쪽 다리의 상대적인 위치 변환
-	glTranslatef(0,-0.17*size,0);
-	drawLowerLeg();
-	glPopMatrix();
-	*/
 	drawHead();
 
 	glPushMatrix();
@@ -586,29 +633,27 @@ void Lion::drawTail() {
 }
 
 void Lion::drawUpperLeg() {
-	glColor3f(1.0,1.0,0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(0.025*size, 0.05*size, 0.0);
-	glVertex3f(0.05*size, 0, 0.0);
-	glVertex3f(0.05*size, -0.165*size, 0.0);
+	glVertex3f(0.06*size, 0, 0.0);
+	glVertex3f(0.06*size, -0.165*size, 0.0);
 	glVertex3f(0.025*size, -0.195*size, 0.0);
 	glVertex3f(-0.025*size, -0.195*size, 0.0);
-	glVertex3f(-0.05*size, -0.165*size, 0.0);
-	glVertex3f(-0.05*size, 0, 0.0);
+	glVertex3f(-0.06*size, -0.165*size, 0.0);
+	glVertex3f(-0.06*size, 0, 0.0);
 	glVertex3f(-0.025*size, 0.05*size, 0.0);
 	glEnd();
 }
 
 void Lion::drawLowerLeg() {
-	glColor3f(1.0,1.0,0.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(0.025*size, 0.05*size, 0.0);
-	glVertex3f(0.06*size, 0, 0.0);
-	glVertex3f(0.05*size, -0.165*size, 0.0);
+	glVertex3f(0.07*size, 0, 0.0);
+	glVertex3f(0.06*size, -0.165*size, 0.0);
 	glVertex3f(0.025*size, -0.195*size, 0.0);
 	glVertex3f(-0.025*size, -0.195*size, 0.0);
-	glVertex3f(-0.05*size, -0.165*size, 0.0);
-	glVertex3f(-0.06*size, 0, 0.0);
+	glVertex3f(-0.06*size, -0.165*size, 0.0);
+	glVertex3f(-0.07*size, 0, 0.0);
 	glVertex3f(-0.025*size, 0.05*size, 0.0);
 	glEnd();
 }

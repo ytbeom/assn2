@@ -23,11 +23,14 @@ public:
 	float x;
 	float y;
 	float size;
-	int c_state;
-	int state;
+	int c_state; // 다리가 너무 빨리 움직이는 것을 막기 위한 counter
+	int state; // 다리의 상태 (0~7)
+	int jump_state; // 점프하면 1, 아니면 0
 	float velocity;
+	float thigh_angle_list[8];
+	float knee_angle_list[8];
 
-	Lion(){ x = 0; y = 0; size = 1; state = 0; c_state = 0;}
+	Lion();
 	void drawLeg();
 	void drawLion();
 	void drawDeath(Lion my_lion);
