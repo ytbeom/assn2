@@ -27,7 +27,7 @@ public:
 	float WidthofTriangle;
 
 	Firepot(int jumplength);
-	void init(float jumplength, float mapsize, int stage);
+	void init(int jumplength, float mapsize, int stage);
 	void display_firepot(int toggle);
 
 

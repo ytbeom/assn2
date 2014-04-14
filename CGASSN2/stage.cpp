@@ -129,6 +129,27 @@ void Background::draw(int BackgroundChange){
 }
 
 void Background::drawFlying(int season, float X, float Y){
+	
+	int color;
+	color = rand()%2;
 
+	if(color=0){
+		glColor3f(1,0,0);
+		glBegin(GL_POLYGON);
+		glVertex2f(X, Y);
+		glVertex2f(X+1, Y);
+		glVertex2f(X+1, Y+1);
+		glVertex2f(X, Y+1);
+		glEnd();
+	}
+	else{
+		glColor3f(1,1,0);
+		glBegin(GL_POLYGON);
+		glVertex2f(X, Y);
+		glVertex2f(X+1, Y);
+		glVertex2f(X+1, Y+1);
+		glVertex2f(X, Y+1);
+		glEnd();
+	}
 
 }

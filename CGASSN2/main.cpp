@@ -7,26 +7,28 @@
 
 
 //vector<int> PotList; // 불항아리의 x 좌표를 저장하는 vector
-vector<int> LoopList; // 불고리의 x 좌표를 저장하는 vector
+//vector<int> LoopList; // 불고리의 x 좌표를 저장하는 vector
 float mapsize;
 float bottom = 20.0;
 int jumplength = 80; // 사자가 1회 점프할 때 움직이는 거리
-int NumofLoop;
+//int NumofLoop;
 int xposition = 0.0;
-extern float RadiusofLoop;
-extern float top;
+//extern float RadiusofLoop;
+//extern float top;
 int BackgroundChange = 0;
-int translateLoop = 0;
+int translateLoop;
 int stage=1;
 Lion my_lion;
 Background my_bg;
 Firepot my_pot(jumplength);
+Fireloop my_loop(jumplength);
 
 void init(void)
 {
 	my_lion.x = 0;
 	my_lion.y = bottom;
 	my_lion.size = 20;
+	translateLoop=0;
 
 	srand((unsigned int)time(NULL));
 	
@@ -35,15 +37,9 @@ void init(void)
 
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
+	my_loop.init(jumplength,mapsize,stage);
 
-
-	// 불고리 개수/위치 설정 (게임 map 밖에 있어도 됨)
-	NumofLoop = rand()%1000+500; // 500에서 1000개 사이의 Loop 생성
-	LoopList.push_back(rand()%(2*jumplength+1)+jumplength); // 0~2*jumplength 사이의 위치에 첫 Loop 생성
-	for (int i=0; i<NumofLoop-1; i++) {
-		// 앞 고리와 jumplength~3*jumplength 의 간격을 갖는 고리를 생성
-		LoopList.push_back(LoopList[i]+(rand()%(jumplength+1)+2*jumplength));
-	}
+	
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
@@ -73,7 +69,7 @@ void display(void)
 		BackgroundChange=0;
 
 	
-	my_bg.draw(BackgroundChange);
+
 
 	if (!collision() && my_lion.x > mapsize && my_bg.season<4) {
 		my_lion.drawClear(my_lion);
@@ -92,11 +88,12 @@ void display(void)
 		exit(1);
 	}
 	else if(!collision()) {
+		my_bg.draw(BackgroundChange);
 
 		//translate Loop
 		glPushMatrix();
 		glTranslatef(translateLoop,0,0);
-		display_fireloop_front(LoopList, BackgroundChange);
+		my_loop.display_fireloop_front(BackgroundChange);
 		glPopMatrix();
 
 		//draw lion
@@ -106,7 +103,7 @@ void display(void)
 		//translate Loop
 		glPushMatrix();
 		glTranslatef(translateLoop,0,0);
-		display_fireloop_back(LoopList, BackgroundChange);
+		my_loop.display_fireloop_back(BackgroundChange);
 		glPopMatrix();
 
 		//draw firepot

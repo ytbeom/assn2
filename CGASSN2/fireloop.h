@@ -9,8 +9,21 @@
 
 using namespace std;
 
-void display_fireloop_front(vector<int> LoopList, int toggle);
-void display_fireloop_back(vector<int> LoopList, int toggle);
-void update_fireloop(vector<int> LoopList);
+class Fireloop{
+public:
+	vector<int> LoopList;
+	vector<int>::iterator pointer;
+	int NumofLoop;
+	int jumplength;
+	float mapsize;
+	float top;
+	float RadiusofLoop;
+	float WidthofLoop;
 
+	Fireloop(int jumplength);
+	void init(int jumplentgh, float mapsize, int stage);
+	void display_fireloop_front(int toggle);
+	void display_fireloop_back(int toggle);
+	//void update_fireloop(vector<int> LoopList);
+};
 #endif FIRELOOP_H
