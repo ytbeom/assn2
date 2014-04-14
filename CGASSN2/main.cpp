@@ -12,6 +12,7 @@ int xposition = 0.0;
 int BackgroundChange = 0;
 int translateLoop;
 int stage=1;
+bool started = false;
 
 Lion my_lion;
 Background my_bg;
@@ -20,9 +21,13 @@ Fireloop my_loop(jumplength);
 
 void init(void)
 {
+	started = true;
 	my_lion.x = 0;
 	my_lion.y = bottom;
 	my_lion.size = 20;
+	my_lion.c_state = 0;
+	my_lion.state = 2;
+	my_lion.jump_state = 0;
 	translateLoop=0;
 
 	srand((unsigned int)time(NULL));
@@ -198,19 +203,19 @@ void Jump(int jump_direction){
 
 	//jump forward
 	if(jump_direction == 1){
-		my_lion.state=1;
+		my_lion.jump_state=1;
 		print_x = my_lion.x-jump_initX;
 		my_lion.x += 1;
 	}
 	//jumb backward
 	else if(jump_direction == -1){
-		my_lion.state=1;
+		my_lion.jump_state=1;
 		print_x = jump_initX-my_lion.x;
 		my_lion.x -= 1;
 	}
 	//jump up
 	else{
-		my_lion.state=2;
+		my_lion.jump_state=1;
 		if(jump_upX<81)
 			jump_upX+=1;
 		print_x = jump_upX;
@@ -225,12 +230,13 @@ void Jump(int jump_direction){
 	if (my_lion.y<bottom) {
 		keep=0;
 		my_lion.state=2;
+		my_lion.jump_state = 0;
 		my_lion.y=bottom;
 		jump_upX=0;
 		glutTimerFunc(1, Stop, 1);
 	}
 	if(keep)
-		glutTimerFunc(2000/60, Jump, jump_direction);
+		glutTimerFunc(700/60, Jump, jump_direction);
 }
 
 void specialkeyboard(int key, int x, int y)
@@ -239,16 +245,16 @@ void specialkeyboard(int key, int x, int y)
 	glLoadIdentity();
 	switch (key) {
 	case GLUT_KEY_UP:
-		if(my_lion.y==bottom) {
+		if(my_lion.y == bottom) {
 			jump_initX = my_lion.x;
 			bool right = ((GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000);
 			bool left = ((GetAsyncKeyState(VK_LEFT) & 0x8000) == 0x8000);
 			if (right)
-				glutTimerFunc(2000/60,Jump,1);
+				glutTimerFunc(700/60,Jump,1);
 			else if (left)
-				glutTimerFunc(2000/60,Jump,-1);
+				glutTimerFunc(700/60,Jump,-1);
 			else
-				glutTimerFunc(2000/60,Jump,0);
+				glutTimerFunc(700/60,Jump,0);
 		}
 		break;
 	}

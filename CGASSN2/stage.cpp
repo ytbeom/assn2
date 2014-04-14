@@ -25,7 +25,6 @@ void Background::init(float _mapsize, float _bottom, int _season){
 		dec[i] = d;
 		//printf("%d\n",d);
 	}
-
 }
 void Background::draw(int BackgroundChange){
 	
