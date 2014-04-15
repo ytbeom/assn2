@@ -42,7 +42,7 @@ void init(void)
 }
 
 int collision(){
-/*	for(int i = 0; i < my_pot.NumofPot; i++){
+	for(int i = 0; i < my_pot.NumofPot; i++){
 		if(my_lion.IsCollisionPot(my_pot.PotList[i]/2, (my_pot.BottomofPot + my_pot.TopofFire)/2, my_pot.RadiusofFire/2))
 			return true;
 	}
@@ -50,7 +50,7 @@ int collision(){
 	for(int i = 0; i < my_loop.NumofLoop; i++){
 		if(my_lion.IsCollisionLoop(my_loop.LoopList[i]+translateLoop, my_loop.top - my_loop.RadiusofLoop, my_loop.RadiusofLoop))
 			return true;
-	}*/
+	}
 	return false;
 }
 

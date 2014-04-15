@@ -29,6 +29,10 @@ public:
 	Firepot(int jumplength);
 	void init(int jumplength, float mapsize, int stage);
 	void display_firepot(int toggle);
+	void drawSidefire();
+	void drawCenterfire();
+	void drawLittlefire();
+
 
 
 };

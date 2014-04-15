@@ -31,9 +31,10 @@ void Fireloop::display_fireloop_front(int toggle,float lion_x,int translateLoop)
 		if(lion_x-100<LoopList[i]+translateLoop&&LoopList[i]+translateLoop<lion_x+1000){
 			glColor3f(1.0, 0.0, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-1,y+2);
@@ -47,9 +48,10 @@ void Fireloop::display_fireloop_front(int toggle,float lion_x,int translateLoop)
 				}
 			glColor3f(1.0, 0.7, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-0.5,y+2);
@@ -63,9 +65,10 @@ void Fireloop::display_fireloop_front(int toggle,float lion_x,int translateLoop)
 				}
 			glColor3f(1.0, 0.5, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle > (-3.0/2.0)*PI; angle -= 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-0.2,y+2);
@@ -90,9 +93,10 @@ void Fireloop::display_fireloop_back(int toggle,float lion_x,int translateLoop) 
 		if(lion_x-100<LoopList[i]+translateLoop&&LoopList[i]+translateLoop<lion_x+1000){
 			glColor3f(1.0, 0.0, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-1,y+2);
@@ -106,9 +110,10 @@ void Fireloop::display_fireloop_back(int toggle,float lion_x,int translateLoop) 
 			}
 			glColor3f(1.0, 0.7, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-0.5,y+2);
@@ -123,9 +128,10 @@ void Fireloop::display_fireloop_back(int toggle,float lion_x,int translateLoop) 
 
 			glColor3f(1.0, 0.5, 0.0);
 			for (float angle = (-1.0/2.0)*PI; angle < (1.0/2.0)*PI; angle += 0.1) {
-				float x = LoopList[i] + WidthofLoop * cos(angle);
+				float x = WidthofLoop * cos(angle);
 				float y = top - RadiusofLoop + RadiusofLoop * sin(angle);
 				glPushMatrix();
+				glTranslatef(LoopList[i],0,0);
 				glTranslatef(rand()%2,0,0);
 				glBegin(GL_POLYGON);
 				glVertex2f(x-0.2,y+2);
