@@ -31,10 +31,9 @@ public:
 	float knee_angle_list[8];
 
 	Lion();
-	void drawLeg();
 	void drawLion();
 	void drawDeath(Lion my_lion);
-	void drawClear(Lion my_lion);
+	void drawClear(Lion my_lion, int stage);
 
 	// assignment2 functions
 	void drawTorso();

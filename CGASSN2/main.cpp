@@ -32,7 +32,7 @@ void init(void)
 	
 	// 1000에서 2000 사이의 mapsize 생성
 	mapsize = rand()%1000+1000;
-//	mapsize = 200;
+//	mapsize = 200; //for test
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
 	my_loop.init(jumplength,mapsize,stage);
@@ -88,16 +88,15 @@ void display(void)
 		BackgroundChange=0;
 
 	if (!collision() && my_lion.x > mapsize && my_bg.season<4) {
-		my_lion.drawClear(my_lion);
+		my_lion.drawClear(my_lion, stage);
 		glFlush();
 		glutSwapBuffers();
 		Sleep(2000);
 		stage++;
 		init();
-		//exit(1);
 	}
 	else if (!collision() && my_lion.x > mapsize && my_bg.season==4) {
-		my_lion.drawClear(my_lion);
+		my_lion.drawClear(my_lion, stage);
 		glFlush();
 		glutSwapBuffers();
 		Sleep(2000);
@@ -159,7 +158,6 @@ void display(void)
 		glPopMatrix();
 
 		//draw lion
-		//my_lion.drawLeg();
 		glPushMatrix();
 		glTranslatef(my_lion.x,my_lion.y,0);
 		my_lion.drawLion();
@@ -239,8 +237,6 @@ void Jump(int jump_direction){
 
 void specialkeyboard(int key, int x, int y)
 {
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
 	switch (key) {
 	case GLUT_KEY_UP:
 		if(my_lion.y==bottom&&startfresh==1) {
@@ -256,15 +252,10 @@ void specialkeyboard(int key, int x, int y)
 		}
 		break;
 	}
-	//gluOrtho2D(-50+my_lion.x, 150+my_lion.x, 0, 100);
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();	
-	//glutPostRedisplay();
 }
 
 void reshape(int w, int h)
 {
-	// TODO
 	// gluOrtho2D update
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
@@ -280,8 +271,6 @@ void moveObjects(int) {
 	else
 		translateLoop-=(float)stage/2+(float)(stage%2)/2;
 	glutPostRedisplay();
-	
-//	glutSpecialFunc(specialkeyboard);
 	glutTimerFunc(2000/60,moveObjects,1);
 }
 
