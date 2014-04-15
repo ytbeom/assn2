@@ -23,13 +23,16 @@ void init(void)
 	my_lion.x = 0;
 	my_lion.y = bottom;
 	my_lion.size = 20;
+	my_lion.c_state = 0;
+	my_lion.state = 2;
+	my_lion.jump_state = 0;
 	translateLoop=0;
 	startfresh=0;
 	srand((unsigned int)time(NULL));
 	
 	// 1000에서 2000 사이의 mapsize 생성
-//	mapsize = rand()%1000+1000;
-	mapsize = 200;
+	mapsize = rand()%1000+1000;
+//	mapsize = 200;
 	my_bg.init(mapsize,bottom,stage);
 	my_pot.init(jumplength,mapsize,stage);
 	my_loop.init(jumplength,mapsize,stage);
@@ -198,19 +201,19 @@ void Jump(int jump_direction){
 
 	//jump forward
 	if(jump_direction == 1){
-		my_lion.state=1;
+		my_lion.jump_state=1;
 		print_x = my_lion.x-jump_initX;
 		my_lion.x += 1;
 	}
 	//jumb backward
 	else if(jump_direction == -1){
-		my_lion.state=1;
+		my_lion.jump_state=1;
 		print_x = jump_initX-my_lion.x;
 		my_lion.x -= 1;
 	}
 	//jump up
 	else{
-		my_lion.state=2;
+		my_lion.jump_state=1;
 		if(jump_upX<81)
 			jump_upX+=1;
 		print_x = jump_upX;
@@ -225,6 +228,7 @@ void Jump(int jump_direction){
 	if (my_lion.y<bottom) {
 		keep=0;
 		my_lion.state=2;
+		my_lion.jump_state = 0;
 		my_lion.y=bottom;
 		jump_upX=0;
 		glutTimerFunc(1, Stop, 1);
